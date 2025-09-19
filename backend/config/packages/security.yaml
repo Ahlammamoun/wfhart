@@ -1,0 +1,28 @@
+security:
+    enable_authenticator_manager: true
+
+    # Fournisseur d'utilisateurs (utilisé seulement pour JWT, pas pour contact)
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        # Pas besoin de sécurité pour dev
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # Firewall API
+        main:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+            provider: app_user_provider
+
+    access_control:
+        # Public: formulaire de contact
+        - { path: ^/api/contact, roles: PUBLIC_ACCESS }
+        # Tout le reste de l'API nécessite d’être connecté
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

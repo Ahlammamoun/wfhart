@@ -26,8 +26,8 @@ services:
       APP_ENV: dev
       APP_DEBUG: 1
       DATABASE_URL: "mysql://root:root@mysql-sc:3306/symfony?serverVersion=8.0"
-      JWT_SECRET_KEY: "/var/www/symfony/config/jwt/private.pem"
-      JWT_PUBLIC_KEY: "/var/www/symfony/config/jwt/public.pem"
+      JWT_SECRET_KEY: "/var/www/wfhart/config/jwt/private.pem"
+      JWT_PUBLIC_KEY: "/var/www/wfhart/config/jwt/public.pem"
 
       JWT_PASSPHRASE: ""  
     ports:
