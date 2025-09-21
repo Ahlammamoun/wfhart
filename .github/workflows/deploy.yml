@@ -1,4 +1,4 @@
-name: 🚀 Deploy to VPS (prod)
+name: Deploy to VPS on prod branch
 
 on:
   push:
@@ -13,30 +13,23 @@ jobs:
         uses: actions/checkout@v3
         with:
           persist-credentials: false
-          submodules: false
 
-      - name: Copy project to server
+      - name: Upload project to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "."                       # ce qu’on envoie
-          target: "/var/www/wfhart"         # répertoire sur le VPS
+          source: "."
+          target: "/var/www/wfhart"
 
-      - name: Deploy with SSH
+      - name: SSH and deploy with Docker
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e
             cd /var/www/wfhart
-            echo "📦 Pulling last images"
-            docker compose pull
-            echo "🛑 Stopping old containers"
-            docker compose down
-            echo "🚀 Starting new containers"
-            docker compose up -d --build
-            echo "✅ Deployment complete"
+            docker-compose down
+            docker-compose up -d --build
